@@ -3,8 +3,17 @@ using CsvHelper;
 public class ClassSorter
 {
     Dictionary<string, Class> Classes = new Dictionary<string, Class>();
-    Dictionary<string, List<Class>> SortedClasses = new Dictionary<string, List<Class>>();
+    string OutputDirectory = string.Empty;
+    string Prefix = string.Empty;
     public ClassSorter(){}
+    public ClassSorter(string outputDirectory, string prefix = "")
+    {
+        this.Prefix = prefix;
+        if (Directory.Exists(outputDirectory))
+            this.OutputDirectory = outputDirectory;
+        else
+            Console.WriteLine("Output directory: " + outputDirectory + " does not exist. Writing to application location.");
+    }
     public void Sort(string csvPath)
     {
         using (var reader = new StreamReader(csvPath))
@@ -28,7 +37,10 @@ public class ClassSorter
         foreach(string distribution in distributions)
         {
             List<Class> classByDistribution = this.Classes.Values.Where(c => c.DistributionArea == distribution).ToList();
-            string filename = distribution + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".csv";
+
+            string filename = this.Prefix + "-" + distribution + "-" + DateTime.Now.ToString("yyyy-dd-MM-HH-mm-ss") + ".csv";
+            filename = Path.Combine(this.OutputDirectory, filename);
+            
             Console.WriteLine("Writing file " + filename);
             using (var writer = new StreamWriter(filename))
             using (var csv = new CsvWriter(writer))
@@ -36,39 +48,5 @@ public class ClassSorter
                 csv.WriteRecords(classByDistribution);
             }
         }
-
-        //foreach(var c in this.Classes.Values)
-        //{
-        //    string subject = c.SubjectCode;
-            
-        //    if(!SubjectCodeToDistributionMap.Map.ContainsKey(subject))
-        //    {
-        //        Console.WriteLine("Unable to map subject " + c.Subject + " to a distribution! Writing to misc.");
-
-        //        if(!this.SortedClasses.ContainsKey("misc"))
-        //            this.SortedClasses.Add("misc", new List<Class>(){ c });
-        //        else
-        //            this.SortedClasses["misc"].Add(c);
-        //        continue;
-        //    }
-
-        //    string distribution = SubjectCodeToDistributionMap.Map[subject];
-            
-        //    if(!this.SortedClasses.ContainsKey(distribution))
-        //        this.SortedClasses.Add(distribution, new List<Class>(){ c });
-        //    else
-        //        this.SortedClasses[distribution].Add(c);
-        //}
-
-        //foreach(string s in this.SortedClasses.Keys)
-        //{
-        //    string filename = s + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".csv";
-        //    Console.WriteLine("Writing file " + filename);
-        //    using (var writer = new StreamWriter(filename))
-        //    using (var csv = new CsvWriter(writer))
-        //    {
-        //        csv.WriteRecords(this.SortedClasses[s]);
-        //    }
-        //}
     }
 }
