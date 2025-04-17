@@ -34,6 +34,8 @@ public class Class
         {
             if (value.Trim() == string.Empty)
                 this._OpenSeats = "0";
+            else
+                this._OpenSeats = value.Trim();
         }
     }
     public string Credits {get; set;}
