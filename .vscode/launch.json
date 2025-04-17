@@ -9,7 +9,6 @@
             "type": "dotnet",
             "request": "launch",
             "projectPath": "${workspaceFolder}/ClassSorter/ClassSorter.csproj",
-            "args":["files.csv"]
         }
     ]
 }

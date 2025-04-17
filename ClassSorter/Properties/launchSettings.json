@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ClassSorter": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\code\\ClassSorter\\Files\\files.csv\""
+    }
+  }
+}
